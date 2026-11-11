@@ -113,6 +113,12 @@ class Cache(collections.abc.MutableMapping):
     def __len__(self):
         return len(self.__data)
 
+    def __copy__(self):
+        import copy
+
+        memo = {id(obj): obj for item in self.__data.items() for obj in item}
+        return copy.deepcopy(self, memo)
+
     # Note that we cannot simply inherit get(), pop() and setdefault()
     # from MutableMapping, since these rely on __getitem__ throwing a
     # KeyError on cache miss.  This is not the case if __missing__ is
